@@ -1,4 +1,5 @@
-# Pi Power Tools ![logo](https://github.com/Botspot/Pi-Power-Tools/blob/master/icons/logo-64.png?raw=true)  
+# Pi Power Tools ![logo](https://github.com/Botspot/Pi-Power-Tools/blob/master/icons/logo-64.png?raw=true)
+[![badge](https://github.com/Botspot/pi-apps/blob/master/icons/badge.png?raw=true)](https://github.com/Botspot/pi-apps)  
 ## General Purpose Raspbian Image & SD Card Manager
 Want to **build your own custom Raspbian SD card image**? Like enabling ssh, modifying `/boot/config.txt`, doing an `apt update`, enabling VNC, or installing something?  
 Have a pile of sd cards and curious what's on them? (and don't want to boot them, one at a time, in a Pi?)  
@@ -63,18 +64,20 @@ Currently, you can change what the menu button opens by default - (Flash, IMG Mo
 Customize Raspbian Images.  
 ![img mode](https://i.ibb.co/yQnT2sC/img-mode.png)    
 Before you can see that above page, you first have to select an img.  
-![img mode page 1](https://i.ibb.co/TLcT6cD/img-mode1.png)  
-**3 ways** to select a Raspbian Image:
- - **Click the arrow** on the right to see any previously used disk images:  
+![img mode page 1](https://i.ibb.co/0sp9NMz/2020-11-27-092634-1920x1080-scrot.png)  
+**4 ways** to select a Raspbian Image:
+ 1. **Click the arrow** on the right to see any previously used disk images:  
 ![arrow](https://i.ibb.co/tH9qLTQ/arrow.png)  
- - **Drag-n-drop** a Raspbian image from File Manager to the text box:  
+ 1. **Drag-n-drop** a Raspbian image from File Manager to the text box:  
 ![drag and drop](https://i.ibb.co/PmFWQzh/dnd.png)  
- - Or click **Download New** to download & unzip a new Raspbian image:  
-![download](https://i.ibb.co/XD8FgkN/download.png)  
+ 1. Click **Download New** to download & unzip a new Raspbian image:  
+![download](https://i.ibb.co/XD8FgkN/download.png)
 Download mode has been tuned for **maximum speed**.  
-![benchmark](https://i.ibb.co/25KV76J/benchmark.png)  
+![benchmark](https://i.ibb.co/25KV76J/benchmark.png)
+ 1. Or create an img from your running Pi by clicking SD to IMG.  
+![sd to img](https://i.ibb.co/pR2dH2N/snapshot.png)  
 
-After a disk image has been selected, this main page appears:
+After a disk image has been selected, this main page appears:  
 ![img mode](https://i.ibb.co/yQnT2sC/img-mode.png)  
 **Buttons**:
  - **Back**: Back to the image selection window.  
@@ -177,8 +180,10 @@ Pro tip: *There are many comments in the shell scripts. Not only does this assis
    - **buffer** - The secret sauce behind the fast download speeds. This ARMHF executable ships with Pi Power Tools, to prevent adding a dependency for installing `buffer`.
    - **edit** - A short bash script that opens a Raspbian image in `gparted`. It handles creating a loop device and deleting it when done.
    - **imglist-parser** - Bash script that parses `imglist`, deletes entries that don't exist on the filesystem, removes duplicate entries, and `echo`'s the resulting output.
+   - **milliways-image-backup** - Fork of a fork of RonR's image-backup. I have made substancial changes to most of the script.
    - **restore-pt** - Short bash script to overwrite the specified disk image's partition table with `part-table.img`.
-   - **shrinkimage** - Botspot's version of `image-shrink`. Uses a unique process to remove all free space from the root partition. Developed to solve the [licensing issue](https://github.com/Botspot/Pi-Power-Tools/issues/1) from using RonR's `image-utils`.
+   - **terminal-run** - This simple script is used to run bash scripts in a terminal. It's a standardized workaround originally developed for [Pi-Apps](https://github.com/Botspot/pi-apps).
+   - **image-shrink** - Botspot's version of `image-shrink`. Added a couple bug fixes and removed the interactive elements for better scripting usage.
    - **zerofree** - Another ARMHF executable for recognizing unused blocks and overwriting them with zeros. Shrinks a disk image even more. Only used if enabled in [Settings](#settings).
    - **zerofree_runner** - Wrapper bash script to interface with `zerofree`. Creates a loop device for the specified img, runs `zerofree`, runs `shrinkimage`, then removes the loop device.
  - **data/** - Stores configuration files
@@ -191,14 +196,7 @@ Pro tip: *There are many comments in the shell scripts. Not only does this assis
    - **version** - The new location for the version file. Compared against the online version to check for updates.
    - **ziplist** - Exactly the same as `imglist`, but stores entries for previously used ZIP files instead. Currently only used by the [Flash tool](#flash).
  - **icons/** - Stores all the icons for the user interface.
- - **vdesktop/** - Ships empty, but `installgui` populates this folder with the below files from the [Vdesktop repo](https://github.com/Botspot/vdesktop):
-   - **vdesktop** - The main script
-   - **clipboardsync** - Keeps the guest's and host's clipboards in sync, like VNC.
-   - **nspawn** - The systemd-nspawn command-line. This was broken out of `vdesktop` to allow for lots of bind-mounts.
-   - **profile** - This is temporarily mounted to `/etc/profile` of the selected device to start the desktop session. (If enabled via [Settings](#settings))
-   - **shadow** - This is temporarily mounted to `/etc/shadow` of the selected device to ensure the user pi's password is `raspberry`. (If enabled via [Settings](#settings))
-   - **version** - Lets Vdesktop keep track of what version it is to see when an update is available.
-   - **README.md** - [The instructions](https://github.com/Botspot/vdesktop/blob/master/README.md) for running vdesktop standalone
+ - **vdesktop/** - Ships empty, but `installgui` populates this folder with all files from the [Vdesktop repo](https://github.com/Botspot/vdesktop).
 
 ### Basic script design:
  - The scripts all use YAD to handle the user interface.* I found that Zenity was way too limited. (and didn't allow for multiple buttons, button icons, customized tooltips, or much else)
